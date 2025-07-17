@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pkl
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb~
+
+# Environment files
+.env
+.venv/
+*.env
+
+# Local runtime/output files
+data/
+output/
+input/
+models/
+
+# OS
+.DS_Store
+Thumbs.db
