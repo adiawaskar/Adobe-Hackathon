@@ -25,6 +25,8 @@ subprocess.run(["python", str(SCRIPTS_DIR / "02_feature_engineering.py")], check
 print("\n🔗 Step 3: Merging Headings...")
 subprocess.run(["python", str(SCRIPTS_DIR / "03_heading_classification.py")], check=True)
 
+os.environ["PDF_NAME"] = PDF_NAME 
+
 print("\n🤩 Step 4: Creating Structured Outline...")
 subprocess.run(["python", str(SCRIPTS_DIR / "04_outline_structuring.py")], check=True)
 

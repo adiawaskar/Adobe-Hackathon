@@ -26,10 +26,14 @@ with open(INPUT_PATH, "r", encoding="utf-8") as f:
     blocks = json.load(f)
 
 
-# In[13]:
+# In[ ]:
 
 
 def extract_features(blocks):
+    # Collect all font sizes to compute median
+    all_font_sizes = [fs for blk in blocks for fs in blk.get("font_sizes", [])]
+    median_font_size = np.median(all_font_sizes) if all_font_sizes else 12
+
     features = []
 
     for block in blocks:
@@ -42,10 +46,14 @@ def extract_features(blocks):
         width = x1 - x0
         height = y1 - y0
 
+        avg_font_size = round(np.mean(font_sizes), 1) if font_sizes else 0
+        norm_font = round(avg_font_size / median_font_size, 2) if median_font_size else 1.0
+
         features.append({
             "page": block["page"],
             "text": text,
-            "font_size_avg": round(np.mean(font_sizes), 1) if font_sizes else 0,
+            "font_size_avg": avg_font_size,
+            "norm_font": norm_font,  # ✅ Added
             "is_bold": any(flag in [1, 20, 21] for flag in font_flags),
             "is_all_caps": text.isupper(),
             "y_position_norm": round(y0 / 1000, 3),  # Normalize for comparison

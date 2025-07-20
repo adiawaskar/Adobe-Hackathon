@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[84]:
+# In[ ]:
 
 
 from pathlib import Path
@@ -10,31 +10,43 @@ import sys
 import fitz  # PyMuPDF
 import json
 import pytesseract
-import easyocr  # ✅ Add this here
+import easyocr
 import numpy as np
 from pdf2image import convert_from_path
 from PIL import Image
+import re  # 📌 Add this if not already imported
 
-# (Windows fix)
+# Utility to remove invisible Unicode directional formatting characters
+def clean_text(text):
+    return re.sub(r'[\u202a-\u202e]', '', text)
+
+
+# Define project root and make sure it's in sys.path
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+# Import language settings
+from config import LANGUAGES
+
+# Tesseract path for Windows
 if os.name == 'nt':
     pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
-# Determine if script is run via command line or in a notebook
+# Determine PDF path based on whether it's a script or notebook
 if "__file__" in globals():
-    # Running as a script (e.g., from main.py)
     pdf_arg = sys.argv[1] if len(sys.argv) > 1 else "sample.pdf"
-    PROJECT_ROOT = Path(__file__).resolve().parent.parent
     PDF_PATH = PROJECT_ROOT / "input" / pdf_arg
 else:
-    # Running inside a Jupyter notebook
-    PROJECT_ROOT = Path().resolve()
-    PDF_PATH = PROJECT_ROOT / "input" / "sample.pdf"
+    # Likely inside Jupyter
+    PDF_PATH = Path().resolve() / "input" / "sample.pdf"
 
+# Define output path
 OUTPUT_PATH = PROJECT_ROOT / "data" / "processed" / "pdf_text_blocks.json"
 OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
 
 
-# In[85]:
+# In[ ]:
 
 
 def extract_text_blocks(pdf_path: Path):
@@ -47,7 +59,7 @@ def extract_text_blocks(pdf_path: Path):
                 spans = line.get("spans", [])
                 if not spans:
                     continue
-                text = " ".join([span["text"] for span in spans]).strip()
+                text = clean_text(" ".join([span["text"] for span in spans]).strip())
                 if not text:
                     continue
                 font_sizes = list(set([round(span["size"], 1) for span in spans]))
@@ -63,10 +75,11 @@ def extract_text_blocks(pdf_path: Path):
     return blocks
 
 
-# In[86]:
+# In[ ]:
 
 
-reader = easyocr.Reader(['en'], gpu=False)
+from config import LANGUAGES
+reader = easyocr.Reader(LANGUAGES, gpu=False)
 
 def extract_text_ocr(pdf_path: Path):
     ocr_blocks = []
@@ -79,7 +92,7 @@ def extract_text_ocr(pdf_path: Path):
         for (bbox, text, conf) in result:
             ocr_blocks.append({
                 "page": page_num,
-                "text": text.strip(),
+                "text": clean_text(text.strip()),
                 "bbox": bbox,
                 "confidence": round(conf, 2)
             })

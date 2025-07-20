@@ -30,13 +30,13 @@ print(f"Loaded {len(df)} blocks")
 df.head()
 
 
-# In[25]:
+# In[ ]:
 
 
 def is_heading(block):
     return (
-        block["font_size_avg"] >= 13.0 and
-        block["word_count"] <= 10 and
+        block.get("norm_font", 0) >= 0.9 and
+        block["word_count"] <= 12 and
         block["is_bold"] and
         not block["text"].endswith(".") and
         not block["text"][0].islower()
@@ -50,7 +50,7 @@ df["is_heading"] = df.apply(is_heading, axis=1)
 df[["text", "is_heading"]].head(10)
 
 
-# In[27]:
+# In[ ]:
 
 
 def merge_headings_flex(df):
@@ -61,15 +61,22 @@ def merge_headings_flex(df):
         merged_text = current["text"]
         j = i + 1
 
+        current_bbox = current.get("bbox", [0, 0, 0, 0])
+        x0_curr = current_bbox[0]
+
         while j < len(df):
             nxt = df.iloc[j].to_dict()
+            next_bbox = nxt.get("bbox", [0, 0, 0, 0])
+            x0_next = next_bbox[0]
 
-            close_y = abs(nxt["y_position_norm"] - current["y_position_norm"]) < 0.025
-            same_font = abs(nxt["font_size_avg"] - current["font_size_avg"]) < 1
-            starts_lower = nxt["text"][0].islower()
+            # Calculate merge conditions safely
+            close_y = abs(nxt.get("y_position_norm", 0) - current.get("y_position_norm", 0)) < 0.03
+            same_font = abs(nxt.get("font_size_avg", 0) - current.get("font_size_avg", 0)) < 1
+            starts_lower = nxt.get("text", "").strip().startswith(tuple("abcdefghijklmnopqrstuvwxyz"))
+            same_indent = abs(x0_next - x0_curr) < 20
 
-            if close_y and same_font and starts_lower:
-                merged_text += " " + nxt["text"]
+            if close_y and same_font and (starts_lower or same_indent):
+                merged_text += " " + nxt.get("text", "")
                 j += 1
             else:
                 break
