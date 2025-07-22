@@ -90,7 +90,7 @@ def evaluate_all(ground_truth_dir, prediction_dir):
     print(f"Precision={overall_precision:.2f}, Recall={overall_recall:.2f}, F1={overall_f1:.2f}")
 
 if __name__ == '__main__':
-    gt_dir = Path('../sample_dataset/ground_truth')
-    pred_dir = Path('../output')
-
+    PROJECT_ROOT = Path(__file__).resolve().parent.parent
+    gt_dir = PROJECT_ROOT / "sample_dataset" / "ground_truth"
+    pred_dir = PROJECT_ROOT / "output"
     evaluate_all(gt_dir, pred_dir) 

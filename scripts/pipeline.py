@@ -376,13 +376,14 @@ class PDFProcessor:
             prev_bbox, prev_spans = lines[0]
             for bbox, spans in lines[1:]:
                 gap = bbox[1] - prev_bbox[3]
-                same_font = all(
-                    span.get("font") == prev_spans[0].get("font") and 
-                    span.get("size") == prev_spans[0].get("size") 
-                    for span in spans
-                )
-
-                if 0 <= gap < 2.0 * (prev_bbox[3] - prev_bbox[1]) and same_font:
+                prev_fonts = set(span.get("font") for span in prev_spans)
+                prev_sizes = set(round(span.get("size", 0), 1) for span in prev_spans)
+                curr_fonts = set(span.get("font") for span in spans)
+                curr_sizes = set(round(span.get("size", 0), 1) for span in spans)
+                same_font = prev_fonts == curr_fonts and prev_sizes == curr_sizes
+                line_height = prev_bbox[3] - prev_bbox[1]
+                # Merge more aggressively for close lines with same font/size
+                if 0 <= gap < 2.5 * line_height and same_font:
                     prev_spans.extend(spans)
                     prev_bbox = (
                         min(prev_bbox[0], bbox[0]),
@@ -396,7 +397,7 @@ class PDFProcessor:
             merged_lines.append((prev_bbox, prev_spans))
 
             for bbox, spans in merged_lines:
-                text = self._clean_text(" ".join(span.get("text", "") for span in spans))
+                text = self._clean_text(" ".join(span.get("text", "") for span in spans)).strip()
                 if not text:
                     continue
                 font_sizes = {round(span.get("size", 0), 1) for span in spans}
@@ -415,6 +416,8 @@ class PDFProcessor:
                     self.title_candidates.append({
                         "text": text,
                         "avg_font_size": float(np.mean([span.get("size", 0) for span in spans])) if spans else 0,
+                        "is_bold": any(span.get("flags", 0) & (1 << 4) for span in spans),
+                        "is_centered": abs((bbox[0] + bbox[2]) / 2 - self.page_dimensions[1].width / 2) < 0.15 * self.page_dimensions[1].width,
                         "y_pos": bbox[1]
                     })
 
@@ -443,7 +446,7 @@ class PDFProcessor:
 
         for i, block in enumerate(self.blocks):
             x0, y0, x1, y1 = block["bbox"]
-            text = block["text"]
+            text = block["text"].strip()
             norm_text = self._normalize_text(text)
             word_count = len(text.split())
             prev_gap = 1000
@@ -459,6 +462,7 @@ class PDFProcessor:
                 "starts_with_numbering": bool(re.match(r'^(\d+(?:\.\d+)*[\.)]?)\s*', text)),
                 "numbering_depth": len(re.findall(r'\.', text.split()[0])) + 1 if '.' in text.split()[0] else 1,
                 "ends_with_period": text.endswith('.'),
+                "ends_with_colon": text.endswith(':'),
                 "avg_font_size": avg_font,
                 "is_bold": any(f & (1 << 4) for f in block["font_flags"]),
                 "size_ratio": size_ratio,
@@ -472,11 +476,24 @@ class PDFProcessor:
 
     def _structure_outline(self) -> dict:
         headings = []
+        seen = set()
         for f in self.features:
-            if f['is_repeated'] or f['word_count'] > 25:
+            # Filter: skip very short/long, repeated, or period-ending lines, or lines with mostly numbers/symbols
+            if f['is_repeated'] or f['word_count'] < 2 or f['word_count'] > 12:
                 continue
             if re.search(r'\.{5,}', f['text']) or f['norm_text'] in ["table of contents"]:
                 continue
+            if f['ends_with_period'] and not f['starts_with_numbering']:
+                continue
+            if sum(c.isalpha() for c in f['text']) < 0.5 * len(f['text']):
+                continue
+            if f['ends_with_colon'] and not f['starts_with_numbering']:
+                continue
+            # Remove near-duplicates on the same page
+            key = (f['norm_text'], f['page_num'])
+            if key in seen:
+                continue
+            seen.add(key)
 
             score = 0
             score += 4 if f["size_ratio"] > 1.3 else 2 if f["size_ratio"] > 1.15 else 0
@@ -494,30 +511,43 @@ class PDFProcessor:
         if not headings:
             return {"title": "No Title Found", "outline": []}
 
-        title_block = max(self.title_candidates, key=lambda b: (b['avg_font_size'], -b['y_pos']), default={"text": "No Title Found"})
-        title = self._clean_text(title_block["text"])
+        # Title: largest, bold, centered text on first page
+        title_block = None
+        for cand in self.title_candidates:
+            if (not title_block or cand["avg_font_size"] > title_block["avg_font_size"] or (cand["avg_font_size"] == title_block["avg_font_size"] and cand["is_bold"] and cand["is_centered"])) and len(cand["text"].split()) >= 3:
+                title_block = cand
+        title = self._clean_text(title_block["text"]) if title_block else "No Title Found"
 
         sizes = [h['avg_font_size'] for h in headings]
-        thresholds = np.percentile(sizes, [85, 60]) if len(sizes) > 3 else [16, 12]
+        thresholds = np.percentile(sizes, [90, 70, 40]) if len(sizes) > 6 else ([16, 14, 12] if len(sizes) > 2 else [12, 11, 10])
 
-        def get_level(font_size):
-            return "H1" if font_size >= thresholds[0] else "H2" if font_size >= thresholds[1] else "H3"
+        def get_level(h):
+            # Use font size as primary, numbering as secondary
+            size = h['avg_font_size']
+            if size >= thresholds[0]:
+                return "H1"
+            elif size >= thresholds[1]:
+                return "H2"
+            elif size >= thresholds[2]:
+                return "H3"
+            else:
+                return "H4"
 
         outline = []
         for h in headings:
             if self._normalize_text(h["text"]) == self._normalize_text(title):
                 continue
             outline.append({
-                "level": get_level(h['avg_font_size']),
-                "text": self._clean_text(h["text"]),
-                "page": h["page_num"]
+                "level": get_level(h),
+                "text": self._clean_text(h["text"]).strip(),
+                "page": h["page_num"] - 1  # adjust to match ground truth if needed
             })
 
-        return {"title": title, "outline": outline}
+        return {"title": title.strip(), "outline": outline}
 
 if __name__ == '__main__':
     PROJECT_ROOT = Path(__file__).resolve().parent.parent
-    INPUT_DIR = PROJECT_ROOT / "sample_dataset" / "pdfs"
+    INPUT_DIR = PROJECT_ROOT / "sample_dataset" / "pdfs-1b"
     OUTPUT_DIR = PROJECT_ROOT / "output"
     OUTPUT_DIR.mkdir(exist_ok=True)
     for pdf_path in INPUT_DIR.glob("*.pdf"):
