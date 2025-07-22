@@ -9,7 +9,7 @@ SCRIPTS_DIR = PROJECT_ROOT / "scripts"
 INPUT_DIR = PROJECT_ROOT / "input"
 
 # Change this to test another PDF
-PDF_NAME = "sample5.pdf"
+PDF_NAME = "sample.pdf"
 PDF_PATH = INPUT_DIR / PDF_NAME
 
 # Ensure the PDF exists

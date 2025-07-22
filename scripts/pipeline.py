@@ -330,7 +330,6 @@ import re
 import fitz  # PyMuPDF
 import numpy as np
 from collections import Counter
-import statistics
 
 class PDFProcessor:
     def __init__(self, pdf_path: Path):
@@ -357,6 +356,8 @@ class PDFProcessor:
     def _extract_text_blocks(self):
         for page_num, page in enumerate(self.document, start=1):
             self.page_dimensions[page_num] = page.rect
+            lines = []
+
             for block in page.get_text("dict", sort=True)["blocks"]:
                 if "lines" not in block:
                     continue
@@ -364,27 +365,58 @@ class PDFProcessor:
                     spans = line.get("spans", [])
                     if not spans:
                         continue
-                    text = self._clean_text(" ".join(span["text"] for span in spans))
-                    if not text:
-                        continue
-                    font_sizes = {round(span["size"], 1) for span in spans}
-                    font_flags = {span["flags"] for span in spans}
-                    fonts = {span["font"] for span in spans}
-                    self.blocks.append({
-                        "page_num": page_num,
+                    lines.append((line["bbox"], spans))
+
+            lines.sort(key=lambda x: x[0][1])
+
+            merged_lines = []
+            if not lines:
+                continue
+
+            prev_bbox, prev_spans = lines[0]
+            for bbox, spans in lines[1:]:
+                gap = bbox[1] - prev_bbox[3]
+                same_font = all(
+                    span.get("font") == prev_spans[0].get("font") and 
+                    span.get("size") == prev_spans[0].get("size") 
+                    for span in spans
+                )
+
+                if 0 <= gap < 2.0 * (prev_bbox[3] - prev_bbox[1]) and same_font:
+                    prev_spans.extend(spans)
+                    prev_bbox = (
+                        min(prev_bbox[0], bbox[0]),
+                        prev_bbox[1],
+                        max(prev_bbox[2], bbox[2]),
+                        bbox[3]
+                    )
+                else:
+                    merged_lines.append((prev_bbox, prev_spans))
+                    prev_bbox, prev_spans = bbox, spans
+            merged_lines.append((prev_bbox, prev_spans))
+
+            for bbox, spans in merged_lines:
+                text = self._clean_text(" ".join(span.get("text", "") for span in spans))
+                if not text:
+                    continue
+                font_sizes = {round(span.get("size", 0), 1) for span in spans}
+                font_flags = {span.get("flags", 0) for span in spans}
+                fonts = {span.get("font", "") for span in spans}
+                self.blocks.append({
+                    "page_num": page_num,
+                    "text": text,
+                    "font_sizes": list(font_sizes),
+                    "font_flags": list(font_flags),
+                    "fonts": list(fonts),
+                    "bbox": bbox,
+                    "dir": spans[0].get("dir", 0) if spans else 0
+                })
+                if page_num == 1:
+                    self.title_candidates.append({
                         "text": text,
-                        "font_sizes": list(font_sizes),
-                        "font_flags": list(font_flags),
-                        "fonts": list(fonts),
-                        "bbox": line["bbox"],
-                        "dir": line["dir"]
+                        "avg_font_size": float(np.mean([span.get("size", 0) for span in spans])) if spans else 0,
+                        "y_pos": bbox[1]
                     })
-                    if page_num == 1:
-                        self.title_candidates.append({
-                            "text": text,
-                            "avg_font_size": statistics.mean(font_sizes) if font_sizes else 0,
-                            "y_pos": line["bbox"][1]
-                        })
 
     def _engineer_features(self):
         if not self.blocks:
@@ -394,7 +426,7 @@ class PDFProcessor:
         first_page_text = " ".join(b["text"] for b in self.blocks if b["page_num"] == 1).lower()
         self.is_form_doc = any(kw in first_page_text for kw in form_keywords)
         if not self.is_form_doc:
-            numbered = sum(1 for b in self.blocks if re.match(r'^\d+[\.\)]', b["text"]))
+            numbered = sum(1 for b in self.blocks if re.match(r'^\d+[\.)]', b["text"]))
             self.is_form_doc = numbered / max(1, len(self.blocks)) > 0.25
 
         all_sizes = [s for b in self.blocks for s in b["font_sizes"]]
@@ -439,88 +471,53 @@ class PDFProcessor:
             })
 
     def _structure_outline(self) -> dict:
-        in_dense_block = [False] * len(self.features)
-        streak = 0
-        for i, f in enumerate(self.features):
-            if f["starts_with_numbering"]:
-                streak += 1
-                if streak > 2:
-                    for j in range(i - streak + 1, i + 1):
-                        in_dense_block[j] = True
-            else:
-                streak = 0
-
-        candidates = [
-            f for i, f in enumerate(self.features)
-            if not in_dense_block[i] and not f["is_repeated"] and 2 <= f["word_count"] <= 15 and
-               not (f["is_all_caps"] and f["word_count"] > 6) and
-               not (self.is_form_doc and f["starts_with_numbering"])
-        ]
-
-        seen = set()
-        unique_blocks = []
-        for b in candidates:
-            key = (b['norm_text'], b['page_num'])
-            if key not in seen:
-                seen.add(key)
-                unique_blocks.append(b)
-
-        if not unique_blocks:
-            return {"title": "No Title Found", "outline": []}
-
-        sizes = [b['avg_font_size'] for b in unique_blocks]
-        clusters = np.percentile(sizes, [90, 70, 40]) if len(sizes) > 10 else np.percentile(sizes, [80, 60, 30]) if len(sizes) > 3 else [16, 14, 12]
-
-        def level(size):
-            return "H1" if size >= clusters[0] else "H2" if size >= clusters[1] else "H3"
-
         headings = []
-        for h in unique_blocks:
+        for f in self.features:
+            if f['is_repeated'] or f['word_count'] > 25:
+                continue
+            if re.search(r'\.{5,}', f['text']) or f['norm_text'] in ["table of contents"]:
+                continue
+
             score = 0
-            score += 4 if h["size_ratio"] > 1.3 else 2 if h["size_ratio"] > 1.15 else 0
-            score += 2 if h["is_bold"] else 0
-            score += 3 if h["gap_ratio"] > 2.5 else 0
-            score += 1 if h["is_title_case"] else 0
-            score += 1 if h["is_centered"] else 0
-            score += 1 if h["is_short"] else 0
-            if not self.is_form_doc and h["starts_with_numbering"]:
-                score += min(2, h["numbering_depth"])
-            score -= 3 if h["ends_with_period"] else 0
-            score -= 1 if h["word_count"] > 12 else 0
-            score -= 5 if h["norm_text"] in ['page', 'continued', 'section'] else 0
-            if score >= (5 if self.is_form_doc else 4):
-                headings.append(h)
+            score += 4 if f["size_ratio"] > 1.3 else 2 if f["size_ratio"] > 1.15 else 0
+            score += 2 if f["is_bold"] else 0
+            score += 3 if f["gap_ratio"] > 2.5 else 0
+            score += 1 if f["is_title_case"] else 0
+            score += 1 if f["is_centered"] else 0
+            score += 1 if f["is_short"] else 0
+            score += min(2, f["numbering_depth"]) if f["starts_with_numbering"] else 0
+            score -= 2 if f["ends_with_period"] else 0
+
+            if score >= 4:
+                headings.append(f)
 
         if not headings:
             return {"title": "No Title Found", "outline": []}
 
-        page_height = self.page_dimensions[1].height
-        title = "No Title Found"
-        tops = [c for c in self.title_candidates if c["y_pos"] < page_height * 0.3]
-        top_choice = max(tops or self.title_candidates, key=lambda b: (b["avg_font_size"], -abs(b["y_pos"] - page_height * 0.1)))
-        title = self._clean_text(top_choice["text"])
+        title_block = max(self.title_candidates, key=lambda b: (b['avg_font_size'], -b['y_pos']), default={"text": "No Title Found"})
+        title = self._clean_text(title_block["text"])
+
+        sizes = [h['avg_font_size'] for h in headings]
+        thresholds = np.percentile(sizes, [85, 60]) if len(sizes) > 3 else [16, 12]
+
+        def get_level(font_size):
+            return "H1" if font_size >= thresholds[0] else "H2" if font_size >= thresholds[1] else "H3"
 
         outline = []
         for h in headings:
             if self._normalize_text(h["text"]) == self._normalize_text(title):
                 continue
-            lvl = ("H1" if h["numbering_depth"] == 1 else "H2" if h["numbering_depth"] == 2 else "H3") if not self.is_form_doc and h["starts_with_numbering"] else level(h["avg_font_size"])
-            outline.append({"level": lvl, "text": self._clean_text(h["text"]), "page": h["page_num"]})
+            outline.append({
+                "level": get_level(h['avg_font_size']),
+                "text": self._clean_text(h["text"]),
+                "page": h["page_num"]
+            })
 
-        merged = []
-        prev = None
-        for h in outline:
-            if prev and h["page"] == prev["page"] and abs(len(h["text"]) - len(prev["text"])) < 10:
-                prev["text"] += " " + h["text"]
-            else:
-                merged.append(h)
-                prev = h
-
-        return {"title": title, "outline": merged}
+        return {"title": title, "outline": outline}
 
 if __name__ == '__main__':
     PROJECT_ROOT = Path(__file__).resolve().parent.parent
-    INPUT_DIR = PROJECT_ROOT / "input"
+    INPUT_DIR = PROJECT_ROOT / "sample_dataset" / "pdfs"
     OUTPUT_DIR = PROJECT_ROOT / "output"
     OUTPUT_DIR.mkdir(exist_ok=True)
     for pdf_path in INPUT_DIR.glob("*.pdf"):

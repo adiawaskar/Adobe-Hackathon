@@ -90,6 +90,7 @@ def evaluate_all(ground_truth_dir, prediction_dir):
     print(f"Precision={overall_precision:.2f}, Recall={overall_recall:.2f}, F1={overall_f1:.2f}")
 
 if __name__ == '__main__':
-    gt_dir = Path('sample_dataset/outputs')
-    pred_dir = Path('output')
+    gt_dir = Path('../sample_dataset/ground_truth')
+    pred_dir = Path('../output')
+
     evaluate_all(gt_dir, pred_dir) 
