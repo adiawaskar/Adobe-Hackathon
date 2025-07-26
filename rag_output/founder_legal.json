@@ -1,0 +1,77 @@
+{
+  "metadata": {
+    "input_documents": [
+      "Breakfast Ideas.pdf",
+      "Dinner Ideas - Mains_1.pdf",
+      "Dinner Ideas - Mains_2.pdf",
+      "Dinner Ideas - Mains_3.pdf",
+      "Dinner Ideas - Sides_1.pdf",
+      "Dinner Ideas - Sides_2.pdf",
+      "Dinner Ideas - Sides_3.pdf",
+      "Dinner Ideas - Sides_4.pdf",
+      "Lunch Ideas.pdf"
+    ],
+    "persona": "Food Contractor",
+    "job_to_be_done": "Prepare a vegetarian buffet-style dinner menu for a corporate gathering, including gluten-free items.",
+    "processing_timestamp": "2025-07-26T07:42:26.402919"
+  },
+  "extracted_sections": [
+    {
+      "document": "Lunch Ideas.pdf",
+      "section_title": "Turkey and Cheese Roll-Ups",
+      "importance_rank": 1,
+      "page_number": 5
+    },
+    {
+      "document": "Lunch Ideas.pdf",
+      "section_title": "BBQ Chicken Wrap",
+      "importance_rank": 2,
+      "page_number": 11
+    },
+    {
+      "document": "Dinner Ideas - Mains_1.pdf",
+      "section_title": "Beef Tacos",
+      "importance_rank": 3,
+      "page_number": 3
+    },
+    {
+      "document": "Lunch Ideas.pdf",
+      "section_title": "Lentil Salad",
+      "importance_rank": 4,
+      "page_number": 7
+    },
+    {
+      "document": "Breakfast Ideas.pdf",
+      "section_title": "Breakfast Tacos",
+      "importance_rank": 5,
+      "page_number": 5
+    }
+  ],
+  "subsection_analysis": [
+    {
+      "document": "Lunch Ideas.pdf",
+      "refined_text": "Turkey and Cheese Roll-Ups",
+      "page_number": 5
+    },
+    {
+      "document": "Lunch Ideas.pdf",
+      "refined_text": "BBQ Chicken Wrap",
+      "page_number": 11
+    },
+    {
+      "document": "Dinner Ideas - Mains_1.pdf",
+      "refined_text": "Beef Tacos",
+      "page_number": 3
+    },
+    {
+      "document": "Lunch Ideas.pdf",
+      "refined_text": "Lentil Salad",
+      "page_number": 7
+    },
+    {
+      "document": "Breakfast Ideas.pdf",
+      "refined_text": "Breakfast Tacos",
+      "page_number": 5
+    }
+  ]
+}

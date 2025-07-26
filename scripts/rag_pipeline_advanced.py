@@ -118,26 +118,47 @@ def main():
     parser.add_argument("--job", type=str, help="Job to be done")
     parser.add_argument("--top_n", type=int, default=5, help="Number of top sections to return")
     parser.add_argument("--output", type=str, default="output/rag_output.json", help="Output JSON path")
+    # Added for docker
+    parser.add_argument("--outline_dir", type=str, default="output", help="Path to outline JSONs")
+    parser.add_argument("--blocks_path", type=str, default="data/processed/pdf_text_blocks.json", help="Path to text block JSON")
+    parser.add_argument("--input_dir", type=str, default="output", help="Path to input PDFs folder")
+
     args = parser.parse_args()
 
     persona = args.persona or input("Enter persona: ")
     job = args.job or input("Enter job to be done: ")
     top_n = args.top_n
-    output_path = args.output
+    # output_path = args.output
+    output_path = Path(args.output)
 
-    PROJECT_ROOT = Path(__file__).resolve().parent.parent
-    OUTLINE_DIR = PROJECT_ROOT / "output"
-    BLOCKS_PATH = PROJECT_ROOT / "data" / "processed" / "pdf_text_blocks.json"
-    PDFS1B_DIR = PROJECT_ROOT / "sample_dataset" / "pdfs-1b"
 
-    print("\n[1/7] Listing allowed PDFs from sample_dataset/pdfs-1b/ ...")
+    # PROJECT_ROOT = Path(__file__).resolve().parent.parent
+    # OUTLINE_DIR = PROJECT_ROOT / "output"
+    # BLOCKS_PATH = PROJECT_ROOT / "data" / "processed" / "pdf_text_blocks.json"
+    # PDFS1B_DIR = PROJECT_ROOT / "sample_dataset" / "pdfs-1b"
+    OUTLINE_DIR = Path(args.outline_dir)
+    BLOCKS_PATH = Path(args.blocks_path)
+    PDFS1B_DIR = Path(args.input_dir)
+
+
+    # print("\n[1/7] Listing allowed PDFs from sample_dataset/pdfs-1b/ ...")
+    # allowed_docs = []
+    # for pdf in sorted(PDFS1B_DIR.glob("*.pdf")):
+    #     allowed_docs.append(pdf.name)
+    # if not allowed_docs:
+    #     print("No PDFs found in sample_dataset/pdfs-1b/.")
+    #     sys.exit(1)
+    # print(f"Allowed input documents: {allowed_docs}")
+
+    print("\n[1/7] Listing available outline JSONs from input_dir/ ...")
     allowed_docs = []
-    for pdf in sorted(PDFS1B_DIR.glob("*.pdf")):
-        allowed_docs.append(pdf.name)
+    for json_file in sorted(OUTLINE_DIR.glob("*.json")):
+        allowed_docs.append(f"{json_file.stem}.pdf")
     if not allowed_docs:
-        print("No PDFs found in sample_dataset/pdfs-1b/.")
+        print("No outline JSONs found in input_dir/. Run the extraction pipeline first.")
         sys.exit(1)
-    print(f"Allowed input documents: {allowed_docs}")
+    print(f"Found outline files for: {allowed_docs}")
+
 
     print("[2/7] Loading outlines...")
     outlines = load_outlines(OUTLINE_DIR, set(allowed_docs))
@@ -216,6 +237,8 @@ def main():
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(final, f, indent=2, ensure_ascii=False)
     print(f"✅ RAG output saved to: {output_path}")
+    print(f"📁 Output directory: {output_path.parent.resolve()}")
+    print("Done!")
 
 if __name__ == "__main__":
     main() 

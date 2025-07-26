@@ -547,7 +547,7 @@ class PDFProcessor:
 
 if __name__ == '__main__':
     PROJECT_ROOT = Path(__file__).resolve().parent.parent
-    INPUT_DIR = PROJECT_ROOT / "sample_dataset" / "pdfs-1b"
+    INPUT_DIR = PROJECT_ROOT / "input"
     OUTPUT_DIR = PROJECT_ROOT / "output"
     OUTPUT_DIR.mkdir(exist_ok=True)
     for pdf_path in INPUT_DIR.glob("*.pdf"):
