@@ -1,9 +1,6 @@
 <h1 align="center">🧠 Persona-Driven Document Intelligence</h1>
 <h3 align="center">Adobe India Hackathon 2025 – Challenge 1B</h3>
 
-<p align="center">
-  <img src="cd../assets/adobe_logo.png" alt="Adobe Logo" width="300"/>
-</p>
 
 ---
 
