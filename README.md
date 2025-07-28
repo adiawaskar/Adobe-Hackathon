@@ -1,17 +1,11 @@
-# 𝗗𝗼𝗰𝗜𝗻𝘁𝗲𝗹𝗹𝗶𝗴𝗲𝗻𝗰𝗲 <img src="assets/adobe_logo.png" width="60" align="right">
+<p align="center">
+  <img src="assets/adobe_logo.png" alt="Adobe Logo" height="100"/>
+</p>
 
-> *Persona-Aware Document Analysis System*  
-> *Adobe India Hackathon 2025 Submission*
+<h1 align="center">Persona-Driven Document Intelligence</h1>
+<h3 align="center">Adobe India Hackathon 2025 — Round 2: "Connect What Matters — For the User Who Matters"</h3>
 
 ---
-
-### 𝗖𝗼𝗻𝘁𝗲𝗻𝘁𝘀 𝗡𝗮𝘃𝗶𝗴𝗮𝘁𝗼𝗿
-|  |  |
-|--|--|
-| � **Project** | [Description](#-project-essence) • [Objectives](#%EF%B8%8F-objectives) |
-| ⚙ **Tech** | [Architecture](#-system-architecture) • [Capabilities](#-core-capabilities) |
-| 🚀 **Usage** | [Installation](#-installation) • [Demo](#-live-demo) |
-| 📊 **Metrics** | [Performance](#-benchmarks) • [Roadmap](#-evolution) |
 
 ---
 
