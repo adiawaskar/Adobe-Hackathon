@@ -2,7 +2,7 @@
 <h3 align="center">Adobe India Hackathon 2025 – Challenge 1B</h3>
 
 <p align="center">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Adobe_Systems_logo_and_wordmark.svg/1280px-Adobe_Systems_logo_and_wordmark.svg.png" alt="Adobe Logo" width="300"/>
+  <img src="cd../assets/adobe_logo.png" alt="Adobe Logo" width="300"/>
 </p>
 
 ---
