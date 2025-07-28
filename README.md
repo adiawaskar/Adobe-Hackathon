@@ -1,24 +1,34 @@
-<p align="center">
-  <img src="assets/adobe_logo.png" alt="Adobe Logo" height="100"/>
-</p>
+# 𝗗𝗼𝗰𝗜𝗻𝘁𝗲𝗹𝗹𝗶𝗴𝗲𝗻𝗰𝗲 <img src="assets/adobe_logo.png" width="60" align="right">
 
-<h1 align="center">Persona-Driven Document Intelligence</h1>
-<h3 align="center">Adobe India Hackathon 2025 — Round 2: "Connect What Matters — For the User Who Matters"</h3>
+> *Persona-Aware Document Analysis System*  
+> *Adobe India Hackathon 2025 Submission*
 
 ---
 
-## 📖 Table of Contents
-- [Project Description](#-project-description)
-- [Objective](#-objective)
-- [Core Capabilities](#-core-capabilities)
-- [System Architecture](#-system-architecture)
-- [Repository Structure](#-repository-structure)
-- [Installation & Setup](#-installation--setup)
-- [Usage](#-usage)
-- [Output Format](#-output-format)
-- [Performance Metrics](#-performance-metrics)
-- [Future Enhancements](#-future-enhancements)
-- [Team](#-team)
+### 𝗖𝗼𝗻𝘁𝗲𝗻𝘁𝘀 𝗡𝗮𝘃𝗶𝗴𝗮𝘁𝗼𝗿
+|  |  |
+|--|--|
+| � **Project** | [Description](#-project-essence) • [Objectives](#%EF%B8%8F-objectives) |
+| ⚙ **Tech** | [Architecture](#-system-architecture) • [Capabilities](#-core-capabilities) |
+| 🚀 **Usage** | [Installation](#-installation) • [Demo](#-live-demo) |
+| 📊 **Metrics** | [Performance](#-benchmarks) • [Roadmap](#-evolution) |
+
+---
+
+## ✨ 𝗣𝗿𝗼𝗷𝗲𝗰𝘁 𝗘𝘀𝘀𝗲𝗻𝗰𝗲
+<div style="background: #f8f8ff; padding: 15px; border-radius: 8px; border-left: 4px solid #ff6b6b;">
+🔍 <b>Context:</b> In the era of information overload, professionals waste <i>17+ hours/week</i> searching documents.  
+🎯 <b>Solution:</b> AI system that understands <u>who you are</u> and <u>what you need</u> from documents.
+</div>
+
+---
+
+## ⌖ 𝗢𝗯𝗷𝗲𝗰𝘁𝗶𝘃𝗲𝘀
+```diff
++ Achieve 90% relevance accuracy for:
+! Investment Analysts → Financial Trends
+! Academic Researchers → Methodology Sections
+- Avoid: Generic keyword matching
 
 ---
 
