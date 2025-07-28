@@ -1,32 +1,19 @@
-# PDF and Document Loading
-pdfplumber==0.9.0
-pypdf==4.2.0
-PyMuPDF==1.23.7
-
-# LangChain and dependencies
-langchain==0.1.16
-langchain-community==0.0.36
-langchain-text-splitters==0.0.1
-langchain-huggingface==0.0.3
-
-# Embeddings & Models
-transformers==4.41.1
-sentence-transformers==2.7.0
-huggingface-hub==0.23.1
-sentencepiece==0.1.99
-
-# Vector store
-faiss-cpu==1.7.4
-chromadb==0.4.24  # Compatible with langchain 0.1.16
-
-# ML & NLP
-scikit-learn==1.0.2
-numpy==1.23.5
-
-# Utility
-pydantic==2.6.4
-tqdm==4.66.2
-
-# Optional: Language detection (remove if unused)
-langdetect==1.0.9
-regex==2023.12.25
+# If using latest versions:
+pdfplumber
+pypdf
+PyMuPDF
+langchain
+langchain-community
+langchain-text-splitters
+langchain-huggingface
+transformers
+sentence-transformers
+huggingface-hub
+sentencepiece
+faiss-cpu
+chromadb
+scikit-learn
+numpy
+pydantic
+tqdm
+click==8.1.7
