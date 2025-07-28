@@ -80,7 +80,6 @@ Once headings are detected and scored, the output is exported in a clean **JSON 
 ## 🔑 Key Features
 
 
-
 * 📊 **Dynamic Font Clustering**: Infers heading hierarchy by clustering font sizes on each PDF.
 * 🧼 **Noise Filtering**: Removes repeated page headers, footers, and noise like "Page 1", dates, etc.
 * 🔍 **Text Style Analysis**: Evaluates bold, all-caps, and title casing to reinforce heading confidence.
@@ -93,13 +92,33 @@ Once headings are detected and scored, the output is exported in a clean **JSON 
 
 1.  **Build the Docker Image**
     ```bash
-    docker build --platform linux/amd64 -t pdf-intelligence-engine:round1b .
+    docker build --platform linux/amd64 -t pdf-outline-extractor:round1a .
     ```
 
 2.  **Run the Extractor**
     ```bash
-    docker run --rm -v "${PWD}\input:/app/input" -v "${PWD}\output:/app/output" --network none pdf-intelligence-engine:round1b
+    docker run --rm -v $(pwd)/input:/app/input -v $(pwd)/output:/app/output --network none pdf-outline-extractor:round1a
 
     ```
-
 🔁 This mounts your local `input/` and `output/` folders into the container. Drop your PDFs into `input/`, and get clean outlines in `output/`.
+
+---
+
+## 🧠 Summary – Challenge 1A: Structured Heading Extraction
+
+This pipeline intelligently transforms **unstructured PDFs into clean, structured outlines**, extracting the document **title and hierarchical headings (H1, H2, H3)**.
+
+It uses:
+- 📐 Visual heuristics  
+- 🔤 Font clustering  
+- 🧠 Text-style scoring  
+
+…to detect structure in real-world PDFs — even with noisy metadata or inconsistent formatting.
+
+### ✅ Ideal For:
+- 🔍 Search & indexing engines  
+- 🧾 Summarization workflows  
+- 📚 Knowledge base pipelines  
+
+**Output:** Clean, structured JSON – ready for any downstream task.  
+**Bonus:** Fast, accurate, and minimal dependencies. 🚀📄

@@ -59,5 +59,21 @@ The output is fully compatible with downstream applications such as NLP pipeline
 
 ---
 
+## 🐳 Docker Setup
+
+
+1.  **Build the Docker Image**
+    ```bash
+    docker build --platform linux/amd64 -t pdf-intelligence-engine:round1b .
+    ```
+
+2.  **Run the Extractor**
+    ```bash
+    docker run --rm -v "${PWD}/input:/app/input" -v "${PWD}/output:/app/output" --network none pdf-intelligence-engine:round1b
+
+    ```
+
+🔁 This mounts your local `input/` and `output/` folders into the container. Drop your PDFs into `input/`, and get clean outlines in `output/`.
+
 ## 🧠 Summary
 This pipeline transforms unstructured PDFs into structured, persona-relevant summaries. It combines **semantic intelligence**, **multilingual embedding**, and **intuitive document structuring** to deliver precise and useful insights. Its versatility makes it applicable across domains and industries — from tech hiring to academic screening and knowledge mining. 🧾🔍
