@@ -1,83 +1,63 @@
-# 🧠 Approach Explanation for Persona-Driven Document Intelligence
+# Adobe Hackathon - Challenge 1B  
+## 🧠 Approach Explanation for Persona-Driven Document Intelligence
 
-## 📌 Objective
-
-To build an intelligent document analysis system that extracts and prioritizes the most relevant sections from a collection of PDFs, tailored to a specific **persona** and their **job-to-be-done**. The system must be **multilingual**, **domain-agnostic**, and **fallback-safe** in diverse real-world scenarios.
-
----
-
-## 🛠️ Tech Stack
-
-- **Python 3.9+**
-- **LangChain** – for pipeline orchestration
-- **OpenAI GPT-4 / GPT-3.5** – for natural language understanding
-- **pdfplumber** – for PDF text extraction
-- **scikit-learn** – for sentence embeddings & similarity
-- **NumPy** – for vector manipulation
-- **Pydantic** – for schema validation
+## 🧩 Overview
+This project implements an intelligent, multilingual PDF document processing pipeline that extracts and ranks relevant sections from unstructured documents based on a user’s **persona** and **job description**. The system is built to be domain-agnostic, scalable, and designed for efficient and fast processing in recruitment, personalization, and document analysis.
 
 ---
 
-## 📂 Input Specification
+## ⚙️ Methodology
 
-- Directory: `./input`
-- Files: 3–10 PDF files related to a common domain
-- `persona` (str): Role of the user (e.g., “PhD Researcher”)
-- `job` (str): Specific task they want to accomplish
+### 1. 📥 Document Ingestion and Preprocessing
+All PDFs placed in the `/input` directory are automatically processed. The system uses **LangChain’s PyPDFLoader** to extract raw text from each document.
+
+To maintain semantic coherence, the text is split using `RecursiveCharacterTextSplitter` with:
+- `chunk_size = 1000`
+- `chunk_overlap = 200`  
+This ensures boundary-sensitive content (e.g., long paragraphs or headings) is preserved across splits.
 
 ---
 
-## 🧭 Step-by-Step Approach
+### 2. 🌐 Semantic Embedding and Retrieval
+Each chunk is embedded using the **`paraphrase-multilingual-MiniLM-L12-v2`** model from HuggingFace. This supports over 50 languages, enabling robust **language-agnostic** processing.
 
-### 1. **PDF Preprocessing**
-- Each PDF is parsed using `pdfplumber`.
-- Text is extracted page-wise and split into **sections** using regex-based title heuristics.
+Embeddings are stored in a **Chroma vector store**, enabling fast semantic similarity retrieval. The **query vector** is created by combining the **persona** and **job description**, representing the user's information need.
 
-### 2. **Section Heading Detection**
-- Headings are identified using:
-  - Font size and layout (where possible)
-  - Text patterns (capital letters, bold, colons)
-  - First-level sentence segmentation
+---
 
-### 3. **Multilingual Support**
-- All extracted text chunks are automatically detected and translated (if needed) using **OpenAI function calling**.
-- Translation only occurs if the chunk's language mismatches the persona/job language.
+### 3. 🎯 Relevance-Based Chunk Selection
+The system retrieves the top `k` most relevant chunks based on cosine similarity. Duplicates and near-duplicates are filtered out to ensure diversity in extracted content.
 
-### 4. **Relevance Scoring**
-- Each chunk is embedded using OpenAI Embeddings.
-- A relevance score is calculated via **cosine similarity** between:
-  - The embedding of `(persona + job)`
-  - The embedding of each section
+---
 
-### 5. **Ranking and Filtering**
-- Top relevant chunks (by cosine score) are ranked.
-- Redundant or low-content sections are filtered using a **minimum token threshold** and repetition penalty.
+### 4. 🧹 Heading Extraction and Structuring
+For each selected chunk:
+- A **heuristic-based heading** is derived from the first non-empty line (stripped and capitalized).
+- The chunk body is cleaned of redundant characters and formatting issues.
+This provides a readable and organized final structure.
 
-### 6. **Structured Output**
-- Output format:
-```json
-{
-  "metadata": {
-    "input_documents": [...],
-    "persona": "...",
-    "job": "...",
-    "processing_timestamp": "..."
-  },
-  "extracted_sections": [
-    {
-      "document": "...",
-      "page_number": ...,
-      "section_title": "...",
-      "importance_rank": ...
-    },
-    ...
-  ],
-  "subsection_analysis": [
-    {
-      "document": "...",
-      "refined_text": "...",
-      "page_number": ...
-    },
-    ...
-  ]
-}
+---
+
+### 5. 📤 Output Generation
+The final result is exported as a structured JSON file containing:
+- 📌 **Metadata**: Input filenames, persona, job role, and timestamp
+- 🧩 **Extracted Sections**: Headings and cleaned, relevant content
+- 🧠 **Subsection Analysis**: Subsection-wise breakdowns and insight extraction
+
+The output is fully compatible with downstream applications such as NLP pipelines, custom dashboards, or LLM-based retrieval systems.
+
+---
+
+## 🌟 Key Technical Highlights
+
+- ✅ **Multilingual Support**: Supports global datasets across languages
+- ✅ **Semantic Search > Keyword Matching**
+- ✅ **Domain-Agnostic Architecture**
+- ✅ **Fast Local Inference** using HuggingFace + Chroma
+- ✅ **Modular & Lightweight Codebase**
+- ✅ **Structured JSON Output** for clean integration
+
+---
+
+## 🧠 Summary
+This pipeline transforms unstructured PDFs into structured, persona-relevant summaries. It combines **semantic intelligence**, **multilingual embedding**, and **intuitive document structuring** to deliver precise and useful insights. Its versatility makes it applicable across domains and industries — from tech hiring to academic screening and knowledge mining. 🧾🔍
