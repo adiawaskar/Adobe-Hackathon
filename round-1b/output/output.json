@@ -1,0 +1,77 @@
+{
+  "metadata": {
+    "input_documents": [
+      "Dinner Ideas - Sides_2.pdf",
+      "Dinner Ideas - Mains_3.pdf",
+      "Lunch Ideas.pdf",
+      "Breakfast Ideas.pdf",
+      "Dinner Ideas - Mains_2.pdf",
+      "Dinner Ideas - Sides_1.pdf",
+      "Dinner Ideas - Mains_1.pdf",
+      "Dinner Ideas - Sides_3.pdf",
+      "Dinner Ideas - Sides_4.pdf"
+    ],
+    "persona": "Food Contractor",
+    "job": "Prepare a vegetarian buffet-style dinner menu for a corporate gathering, including gluten-free items.",
+    "processing_timestamp": "2025-07-28T22:51:32.535160"
+  },
+  "extracted_sections": [
+    {
+      "document": "Dinner Ideas - Mains_2.pdf",
+      "section_title": "Grilled Salmon",
+      "importance_rank": 1,
+      "page_number": 12
+    },
+    {
+      "document": "Dinner Ideas - Mains_3.pdf",
+      "section_title": "Honey Garlic Pork Ribs",
+      "importance_rank": 2,
+      "page_number": 5
+    },
+    {
+      "document": "Dinner Ideas - Mains_1.pdf",
+      "section_title": "Lasagna",
+      "importance_rank": 3,
+      "page_number": 4
+    },
+    {
+      "document": "Lunch Ideas.pdf",
+      "section_title": "Chickpea and Avocado Sandwich",
+      "importance_rank": 4,
+      "page_number": 8
+    },
+    {
+      "document": "Dinner Ideas - Mains_2.pdf",
+      "section_title": "Grilled Cheese Sandwich",
+      "importance_rank": 5,
+      "page_number": 11
+    }
+  ],
+  "subsection_analysis": [
+    {
+      "document": "Dinner Ideas - Mains_2.pdf",
+      "refined_text": "Grilled Shrimp Skewers Ingredients: • 1 pound large shrimp, peeled and deveined • 1/4 cup olive oil • 2 cloves garlic, minced • 1 lemon, juiced • 1 tablespoon fresh parsley, chopped • Salt and pepper to taste • Bamboo skewers Instructions: • Preheat grill to medium-high heat. Grilled Salmon Ingredients: • 4 salmon fillets • 1/4 cup olive oil • 2 cloves garlic, minced • 1 lemon, juiced • 1 tablespoon fresh dill, chopped • Salt and pepper to taste Instructions: • Preheat grill to medium-high heat.",
+      "page_number": 12
+    },
+    {
+      "document": "Dinner Ideas - Mains_3.pdf",
+      "refined_text": "Honey Garlic Pork Ribs Ingredients: • 2 pounds pork ribs • 1/4 cup honey • 1/4 cup soy sauce • 2 tablespoons rice vinegar • 3 cloves garlic, minced • 1 teaspoon grated ginger • 1 teaspoon paprika • Salt and pepper to taste • Sliced green onions for garnish Instructions: • Preheat oven to 300°F (150°C). • Season with salt and pepper, and sprinkle with Parmesan cheese.",
+      "page_number": 5
+    },
+    {
+      "document": "Dinner Ideas - Mains_1.pdf",
+      "refined_text": "Lasagna Ingredients: • 1 pound ground beef • 1 small onion, diced • 2 cloves garlic, minced • 1 jar (24 ounces) marinara sauce • 1 can (15 ounces) ricotta cheese • 1 egg • 1/4 cup grated Parmesan cheese • 1 teaspoon dried basil • 1 teaspoon dried oregano • 9 lasagna noodles, cooked • 2 cups shredded mozzarella cheese Instructions: • Preheat oven to 375°F (190°C). • Stir in marinara sauce and simmer for 10 minutes.",
+      "page_number": 4
+    },
+    {
+      "document": "Lunch Ideas.pdf",
+      "refined_text": "Greek Salad Ingredients: • 1 cup cherry tomatoes, halved • 1/2 cucumber, diced • 1/4 cup red onion, finely chopped • 1/4 cup black olives, sliced • 1/4 cup feta cheese, crumbled • 2 tablespoons olive oil • 1 tablespoon red wine vinegar • Salt and pepper to taste Instructions: • In a large bowl, combine the tomatoes, cucumber, red onion, olives, and feta cheese. Chickpea and Avocado Sandwich Ingredients: • 2 slices whole grain bread • 1/2 avocado, mashed • 1/2 cup chickpeas, mashed • 1/4 cup cherry tomatoes, halved • 1 tablespoon olive oil • Salt and pepper to taste Instructions: • In a bowl, combine the mashed avocado and chickpeas.",
+      "page_number": 8
+    },
+    {
+      "document": "Dinner Ideas - Mains_2.pdf",
+      "refined_text": "Grilled Cheese Sandwich Ingredients: • 8 slices bread • 4 slices cheddar cheese • 4 slices mozzarella cheese • 1/4 cup butter Instructions: • Preheat a skillet over medium heat. • Place a slice of cheddar cheese and a slice of mozzarella cheese between two slices of bread, buttered side out.",
+      "page_number": 11
+    }
+  ]
+}

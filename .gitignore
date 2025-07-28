@@ -16,8 +16,6 @@ __pycache__/
 
 # Local runtime/output files
 data/
-output/
-input/
 models/
 
 # OS
