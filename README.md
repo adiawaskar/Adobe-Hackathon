@@ -95,6 +95,8 @@ The system should:
     ├─ 📜 results.json     # Structured output
     └─ 📜 summary.txt      # Human-readable summary
 
+
+```
 ---
 
 ## 📂 Repository Structure
@@ -126,7 +128,7 @@ adobe-hackathon-2025/
 ├── 📜 Dockerfile              # Container configuration
 ├── 📜 LICENSE                 # Usage terms
 └── 📜 README.md               # This file
-
+```
 ## 🌟 Repository Summary
 
 ### **🚀 Purpose**
@@ -167,3 +169,5 @@ A Dockerized, persona-aware document intelligence system that:
 
 ```bash
 git clone https://github.com/yourusername/adobe-hackathon-2025.git
+
+```
