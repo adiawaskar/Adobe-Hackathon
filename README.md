@@ -17,15 +17,6 @@
 
 ---
 
-## ⌖ 𝗢𝗯𝗷𝗲𝗰𝘁𝗶𝘃𝗲𝘀
-```diff
-+ Achieve 90% relevance accuracy for:
-! Investment Analysts → Financial Trends
-! Academic Researchers → Methodology Sections
-- Avoid: Generic keyword matching
-
----
-
 ## 📘 Project Description
 
 In an age of overwhelming information, discovering *what truly matters* within a document isn't just about keyword search — it's about context, purpose, and personalization.
