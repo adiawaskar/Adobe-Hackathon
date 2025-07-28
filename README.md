@@ -1,6 +1,5 @@
 <p align="center">
   <img src="<p align="center">
-  <img src="[https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Adobe_Systems_logo_and_wordmark.svg/512px-Adobe_Systems_logo_and_wordmark.svg.png](https://blog.adobe.com/en/publish/2020/05/28/media_1cc0fcc19cf0e64decbceb3a606707a3ad23f51dd.png?width=2000&format=webply&optimize=medium)" alt="Adobe Logo" height="100">
 </p>
 
 <h1 align="center">Persona-Driven Document Intelligence</h1>
