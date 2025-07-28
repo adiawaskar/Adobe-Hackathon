@@ -2,18 +2,18 @@
   "metadata": {
     "input_documents": [
       "Lunch Ideas.pdf",
-      "Dinner Ideas - Mains_1.pdf",
-      "Dinner Ideas - Sides_3.pdf",
-      "Dinner Ideas - Mains_3.pdf",
-      "Dinner Ideas - Sides_4.pdf",
-      "Dinner Ideas - Sides_2.pdf",
-      "Dinner Ideas - Mains_2.pdf",
       "Dinner Ideas - Sides_1.pdf",
-      "Breakfast Ideas.pdf"
+      "Dinner Ideas - Sides_2.pdf",
+      "Dinner Ideas - Mains_1.pdf",
+      "Dinner Ideas - Mains_3.pdf",
+      "Dinner Ideas - Sides_3.pdf",
+      "Dinner Ideas - Sides_4.pdf",
+      "Breakfast Ideas.pdf",
+      "Dinner Ideas - Mains_2.pdf"
     ],
     "persona": "Food Contractor",
     "job": "Prepare a vegetarian buffet-style dinner menu for a corporate gathering, including gluten-free items.",
-    "processing_timestamp": "2025-07-28T20:53:23.407950"
+    "processing_timestamp": "2025-07-28T21:20:39.805691"
   },
   "extracted_sections": [
     {
