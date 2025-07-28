@@ -1,4 +1,5 @@
 # File: round1a/requirements.txt
+PyMuPDF==1.23.22
 pdfplumber==0.9.0
 numpy==1.23.5
 scikit-learn==1.0.2

@@ -38,7 +38,7 @@ class OutputModel(BaseModel):
 class DocumentProcessor:
     def __init__(self):
         # self.embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
-        self.embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
+        self.embeddings = HuggingFaceEmbeddings(model_name="local_model")
         self.text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=1000,
             chunk_overlap=200
@@ -128,6 +128,10 @@ class DocumentProcessor:
 
     def analyze_documents(self, documents: List[Dict], persona: str, job: str) -> Dict:
         """Main analysis pipeline"""
+
+        from chromadb.config import Settings
+        settings = Settings(anonymized_telemetry=False)
+
         key_concepts = self._extract_key_concepts(documents, job)
         print(f"Identified key concepts: {key_concepts[:10]}...")
 

@@ -4,90 +4,57 @@
     {
       "level": "H3",
       "text": "Name of the Government Servant Designation Date of entering the Central Government Service",
-      "page": 1,
-      "size": 9.7,
-      "bold": false,
-      "all_upper": false
+      "page": 1
     },
     {
       "level": "H2",
       "text": "PAY + SI + NPA",
-      "page": 1,
-      "size": 9.7,
-      "bold": false,
-      "all_upper": true
+      "page": 1
     },
     {
       "level": "H3",
       "text": "Whether permanent or temporary Home Town as recorded in the Service Book Whether wife / husband is employed and if so whether entitled to LTC Whether the concession is to be availed for visiting home town and if so block for which LTC is to be availed. (a) If the concession is to visit anywhere in India, the place to be visited. (b) Block for which to be availed. Single",
-      "page": 1,
-      "size": 9.7,
-      "bold": false,
-      "all_upper": false
+      "page": 1
     },
     {
       "level": "H3",
       "text": "fare/bus",
-      "page": 1,
-      "size": 9.7,
-      "bold": false,
-      "all_upper": false
+      "page": 1
     },
     {
       "level": "H3",
       "text": "the headquarters to home town/place of visit by 10. shortest route. Persons in respect of whom LTC is proposed to be availed. S.No",
-      "page": 1,
-      "size": 9.7,
-      "bold": false,
-      "all_upper": false
+      "page": 1
     },
     {
       "level": "H2",
       "text": "Relationship",
-      "page": 1,
-      "size": 9.7,
-      "bold": false,
-      "all_upper": false
+      "page": 1
     },
     {
       "level": "H3",
       "text": "Amount of advance required.",
-      "page": 1,
-      "size": 9.7,
-      "bold": false,
-      "all_upper": false
+      "page": 1
     },
     {
       "level": "H2",
       "text": "Rs. 12.",
-      "page": 1,
-      "size": 9.7,
-      "bold": false,
-      "all_upper": false
+      "page": 1
     },
     {
       "level": "H3",
       "text": "I declare that the particulars furnished above are true and correct to the best of my knowledge. I undertake to produce the tickets for the outward journey within ten days of receipt of the advance.",
-      "page": 1,
-      "size": 9.7,
-      "bold": false,
-      "all_upper": false
+      "page": 1
     },
     {
       "level": "H3",
       "text": "In the event of cancellation of the journey or if I fail to produce the tickets within ten days of receipt of advance, I undertake to refund the entire advance in one lump sum.",
-      "page": 1,
-      "size": 9.7,
-      "bold": false,
-      "all_upper": false
+      "page": 1
     },
     {
       "level": "H3",
       "text": "Date Signature of Government Servant.",
-      "page": 1,
-      "size": 9.7,
-      "bold": false,
-      "all_upper": false
+      "page": 1
     }
   ],
   "source": "file01.pdf"
