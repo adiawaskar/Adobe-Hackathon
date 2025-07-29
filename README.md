@@ -92,37 +92,35 @@ The system should:
 
 
 ```
----
 
-## 📂 Repository Structure
+## 📂 Repository Structure 
 
-```text
-
-adobe-hackathon-2025/
-├── 📂 assets/                 # Static resources
-│   ├── adobe_logo.png         # Brand assets
-│   └── architecture.png       # System diagram
-├── 📂 config/                 # Configuration files
-│   ├── model_config.yaml      # Model parameters
-│   └── processing_rules.yaml  # Extraction rules
-├── 📂 docs/                   # Documentation
-│   ├── requirements.txt       # Python dependencies
-│   └── setup_guide.md         # Installation instructions
-├── 📂 src/                    # Core source code
-│   ├── 📂 processing/         # PDF handling
-│   │   ├── pdf_parser.py      # Text extraction
-│   │   └── layout_analyzer.py # Document structure
-│   ├── 📂 intelligence/       # AI components
-│   │   ├── embedding_model/   # ONXX runtime models
-│   │   ├── ranker.py          # Relevance scoring
-│   │   └── summarizer.py      # Content condensation
-│   └── main.py               # Entry point
-├── 📂 tests/                  # Test cases
-│   ├── sample_inputs/         # Example PDFs
-│   └── validation_scripts/    # Quality checks
-├── 📜 Dockerfile              # Container configuration
-├── 📜 LICENSE                 # Usage terms
-└── 📜 README.md               # This file
+```bash
+adobe-hackathon/
+├── 📂 assets/                  # Branding and visuals
+│   └── adobe_logo.png         # Official logo
+│
+├── 📂 round-1a/                # First submission package
+│   ├── 📂 input/              # Sample PDFs for testing
+│   ├── 📂 output/             # Generated analysis files
+│   ├── 📜 app.py             # Main application logic
+│   ├── 📜 Dockerfile          # Container configuration
+│   ├── 📜 README.md          # Round-specific docs
+│   └── 📜 requirements.txt    # Python dependencies
+│
+├── 📂 round-1b/                # Enhanced submission
+│   ├── 📂 input/              
+│   │   └── 📂 local_model/    # Custom trained models
+│   ├── 📂 output/             # Processed results
+│   ├── 📜 app.py             # Improved version
+│   ├── 📜 approach_explanation.md  # Methodology
+│   ├── 📜 Dockerfile          
+│   └── 📜 requirements.txt    
+│
+├── 📜 .gitignore              # Version control excludes
+├── 📜 environment.yml         # Conda environment
+├── 📜 package-lock.json       # Node.js dependencies
+└── 📜 README.md              # Master documentation
 ```
 ## 🌟 Repository Summary
 
