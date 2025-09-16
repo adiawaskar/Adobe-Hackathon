@@ -1,11 +1,4 @@
-<p align="center">
-  <img src="assets/adobe_logo.png" alt="Adobe Logo" height="100"/>
-</p>
 
-<h1 align="center">Persona-Driven Document Intelligence</h1>
-<h3 align="center">Adobe India Hackathon 2025 — For the User Who Matters"</h3>
-
----
 
 
 
